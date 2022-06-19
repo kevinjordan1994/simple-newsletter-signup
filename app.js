@@ -30,13 +30,21 @@ app.post(`/signup`, function (req, res) {
 
   const jsonData = JSON.stringify(data);
 
-  const url = `https://us13.api.mailchimp.com/3.0/lists/62ab12d0f4`;
+  const url = `https://us13.api.mailchimp.com/3.0/lists/audience id`; //Audience ID
   const options = {
     method: `POST`,
-    auth: `kjord94:217e9053a72ddd668d6aea4b44b23c1b-us13`,
+    auth: `kjord94:(API key goes here)`, //API Key
   };
 
   const request = https.request(url, options, function (response) {
+    const { statusCode } = response;
+
+    if (statusCode === 200) {
+      res.sendFile(__dirname + `/success.html`);
+    } else {
+      res.sendFile(__dirname + `/failure.html`);
+    }
+
     response.on(`data`, function (data) {
       console.log(JSON.parse(data));
     });
@@ -46,12 +54,16 @@ app.post(`/signup`, function (req, res) {
   request.end();
 });
 
+app.post(`/failure`, function (req, res) {
+  res.redirect(`/`);
+});
+
 app.listen(3000, function () {
   console.log(`Server running on port 3000`);
 });
 
 //Key
-// 217e9053a72ddd668d6aea4b44b23c1b-us13
+// From mailchimp site
 
 //Audience ID
-// 62ab12d0f4
+// From mailchimp site
